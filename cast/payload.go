@@ -131,16 +131,27 @@ type Image struct {
 }
 
 type Media struct {
-	MediaSessionId int        `json:"mediaSessionId"`
-	PlayerState    string     `json:"playerState"`
-	CurrentTime    float32    `json:"currentTime"`
-	IdleReason     string     `json:"idleReason"`
-	Volume         Volume     `json:"volume"`
-	CurrentItemId  int        `json:"currentItemId"`
-	LoadingItemId  int        `json:"loadingItemId"`
-	CustomData     CustomData `json:"customData"`
+	MediaSessionId int         `json:"mediaSessionId"`
+	PlayerState    string      `json:"playerState"`
+	CurrentTime    float32     `json:"currentTime"`
+	IdleReason     string      `json:"idleReason"`
+	Volume         Volume      `json:"volume"`
+	CurrentItemId  int         `json:"currentItemId"`
+	LoadingItemId  int         `json:"loadingItemId"`
+	CustomData     CustomData  `json:"customData"`
+
+	BreakStatus    BreakStatus `json:"breakStatus,omitempty"`
 
 	Media MediaItem `json:"media"`
+}
+
+// BreakStatus holds CAF v3 ad-break metadata when an ad is playing
+type BreakStatus struct {
+	BreakId              string  `json:"breakId"`
+	BreakClipId          string  `json:"breakClipId"`
+	CurrentBreakTime     float32 `json:"currentBreakTime"`
+	CurrentBreakClipTime float32 `json:"currentBreakClipTime"`
+	WhenSkippable        float32 `json:"whenSkippable"`
 }
 
 type CustomData struct {
