@@ -1,4 +1,4 @@
-module github.com/vishen/go-chromecast
+module github.com/ITJoeSchmo/go-chromecast-breakstatus
 
 go 1.23.2
 
