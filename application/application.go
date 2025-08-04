@@ -510,13 +510,16 @@ func (a *Application) Skipad() error {
 	if a.media == nil {
 		return ErrNoMediaSkip
 	}
-	if a.media.CustomData.PlayerState != 1081 {
+
+	// Must be in an ad-break (CAF v3)
+	if a.media.BreakStatus == nil {
 		return ErrNoMediaSkipad
 	}
 
 	var result error
 	MAX_LOOP := a.skipadRetries
-	for a.media.CustomData.PlayerState == 1081 {
+	
+	for a.media.BreakStatus.CurrentBreakClipTime < a.media.BreakStatus.WhenSkippable {
 		result = a.sendMediaRecv(&cast.MediaHeader{
 			PayloadHeader:  cast.SkipHeader,
 			MediaSessionId: a.media.MediaSessionId,
