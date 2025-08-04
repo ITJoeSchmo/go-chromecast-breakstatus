@@ -520,19 +520,22 @@ func (a *Application) Skipad() error {
 	MAX_LOOP := a.skipadRetries
 	
 	for a.media.BreakStatus.CurrentBreakClipTime < a.media.BreakStatus.WhenSkippable {
-		result = a.sendMediaRecv(&cast.MediaHeader{
-			PayloadHeader:  cast.SkipHeader,
-			MediaSessionId: a.media.MediaSessionId,
-		})
-		// fmt.Printf("Looping because %d\n", a.media.CustomData.PlayerState)
-		time.Sleep(a.skipadSleep)
-		a.updateMediaStatus()
+	        time.Sleep(a.skipadSleep)
+	        a.updateMediaStatus()         // refresh a.media
+	        if a.media.BreakStatus == nil {
+	            // ad ended or no longer in break
+	            return ErrNoMediaSkipad
+	        }
 		MAX_LOOP--
 		if MAX_LOOP == 0 {
 			return ErrAdMaxLoop
 		}
 	}
-	return result
+	
+	return a.sendMediaRecv(&cast.MediaHeader{
+	        PayloadHeader:  cast.SkipHeader,
+	        MediaSessionId: a.media.MediaSessionId,
+	})
 }
 
 func (a *Application) StopMedia() error {
